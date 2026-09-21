@@ -3,11 +3,11 @@ import Header from "./Header";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", minHeight: "100vh" }}>
+    <div className="grid grid-cols-[240px_1fr] min-h-screen bg-gray-50">
       <Sidebar />
       <div>
         <Header />
-        <main style={{ padding: 24 }}>{children}</main>
+        <main className="p-6">{children}</main>
       </div>
     </div>
   );

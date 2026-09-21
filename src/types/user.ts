@@ -6,4 +6,7 @@ export interface User {
   email: string;
   role: UserRole;
   active: boolean;
+  // Campos opcionales para la vista de Usuarios y permisos.
+  warehouseScope?: string;
+  lastAccess?: string;
 }

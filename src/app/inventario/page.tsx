@@ -1,7 +1,11 @@
+"use client";
+
 import InventoryView from "@/components/inventory/InventoryView";
-import { mockEquipment } from "@/data/mockData";
+import { useInventory } from "@/context/InventoryContext";
 
 export default function InventoryPage() {
+  const { equipment } = useInventory();
+
   return (
     <main className="min-h-screen bg-gray-50 p-6 md:p-8">
       <div className="mx-auto max-w-7xl">
@@ -12,7 +16,7 @@ export default function InventoryPage() {
             </h1>
 
             <p className="mt-1 text-gray-600">
-              {mockEquipment.length} registros en inventario
+              {equipment.length} registros en inventario
             </p>
           </div>
 
@@ -27,7 +31,7 @@ export default function InventoryPage() {
           </div>
         </div>
 
-        <InventoryView equipment={mockEquipment} />
+        <InventoryView equipment={equipment} />
       </div>
     </main>
   );

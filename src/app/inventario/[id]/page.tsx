@@ -1,29 +1,42 @@
+"use client";
+
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { mockEquipment } from "@/data/mockData";
+import { useParams } from "next/navigation";
+import { useInventory } from "@/context/InventoryContext";
 import TraceabilityTimeline from "@/components/inventory/TraceabilityTimeline";
-import { mockTraceability } from "@/data/mockTraceability";
 
-interface Props {
-  params: Promise<{ id: string }>;
-}
+export default function EquipmentDetailPage() {
+  const params = useParams<{ id: string }>();
+  const { equipment: equipmentList, traceability } = useInventory();
 
-export default async function EquipmentDetailPage({ params }: Props) {
-  const { id } = await params;
+  const equipment = equipmentList.find(
+    (item) => item.id === params.id
+  );
 
-  const equipment = mockEquipment.find((item) => item.id === id);
-  const traceability = mockTraceability
+  if (!equipment) {
+    return (
+      <main className="min-h-screen bg-gray-50 p-8">
+        <p>Equipo no encontrado.</p>
+
+        <Link
+          href="/inventario"
+          className="mt-4 inline-block text-blue-600 hover:underline"
+        >
+          ← Volver al inventario
+        </Link>
+      </main>
+    );
+  }
+
+  const equipmentTraceability = traceability
     .filter((event) => event.equipmentId === equipment.id)
     .sort(
       (a, b) =>
         new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-  if (!equipment) {
-    notFound();
-  }
-
-  const lowStock = equipment.stock <= equipment.minimumStock;
+  const lowStock =
+    equipment.stock <= equipment.minimumStock;
 
   return (
     <main className="min-h-screen bg-gray-50 p-6 text-gray-900 md:p-8">
@@ -37,7 +50,9 @@ export default async function EquipmentDetailPage({ params }: Props) {
 
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row">
           <div>
-            <p className="text-sm text-gray-500">{equipment.code}</p>
+            <p className="text-sm text-gray-500">
+              {equipment.code}
+            </p>
 
             <h1 className="text-3xl font-bold">
               {equipment.name}
@@ -65,7 +80,10 @@ export default async function EquipmentDetailPage({ params }: Props) {
           <Info label="Proveedor" value={equipment.supplier} />
 
           <Info label="Garantía" value={equipment.warranty} />
-          <Info label="Fecha de compra" value={equipment.purchaseDate} />
+          <Info
+            label="Fecha de compra"
+            value={equipment.purchaseDate}
+          />
 
           <Info
             label="Existencia"
@@ -86,6 +104,7 @@ export default async function EquipmentDetailPage({ params }: Props) {
             }
           />
         </section>
+
         <section className="mt-6 rounded-xl border border-gray-200 bg-white p-6">
           <div className="mb-6">
             <h2 className="text-xl font-semibold">
@@ -97,7 +116,9 @@ export default async function EquipmentDetailPage({ params }: Props) {
             </p>
           </div>
 
-          <TraceabilityTimeline events={traceability} />
+          <TraceabilityTimeline
+            events={equipmentTraceability}
+          />
         </section>
       </div>
     </main>
@@ -114,7 +135,9 @@ function Info({
   return (
     <div>
       <p className="text-sm text-gray-500">{label}</p>
-      <p className="mt-1 font-medium">{value || "No registrado"}</p>
+      <p className="mt-1 font-medium">
+        {value || "No registrado"}
+      </p>
     </div>
   );
 }

@@ -1,6 +1,3 @@
-import MovementTable from "@/components/movements/MovementTable";
-import { mockEquipment } from "@/data/mockData";
-import { mockMovements } from "@/data/mockMovements";
 import MovementsView from "@/components/movements/MovementsView";
 
 export default function MovementsPage() {
@@ -17,10 +14,7 @@ export default function MovementsPage() {
           </p>
         </div>
 
-        <MovementsView
-          initialEquipment={mockEquipment}
-          initialMovements={mockMovements}
-        />
+        <MovementsView />
       </div>
     </main>
   );

@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import type { Equipment, EquipmentStatus } from "@/types/equipment";
 import EquipmentTable from "./EquipmentTable";
+import { useInventory } from "@/context/InventoryContext";
+import Link from "next/link";
 
 interface InventoryViewProps {
   equipment: Equipment[];
@@ -10,7 +12,8 @@ interface InventoryViewProps {
 
 type FilterStatus = "ALL" | "LOW_STOCK" | EquipmentStatus;
 
-export default function InventoryView({ equipment }: InventoryViewProps) {
+export default function InventoryView() {
+  const { equipment } = useInventory();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<FilterStatus>("ALL");
 
@@ -36,6 +39,12 @@ export default function InventoryView({ equipment }: InventoryViewProps) {
 
   return (
     <>
+      <Link
+        href="/movimientos"
+        className="mb-4 inline-block text-sm font-medium text-blue-600 hover:underline"
+      >
+        Ir a movimientos →
+      </Link>
       <div className="mb-5 flex flex-col gap-3 md:flex-row">
         <input
           type="search"

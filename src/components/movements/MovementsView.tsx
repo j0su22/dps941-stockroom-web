@@ -1,27 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import type { Equipment } from "@/types/equipment";
-import type { Movement, MovementType } from "@/types/movement";
 import MovementTable from "./MovementTable";
+import { useInventory } from "@/context/InventoryContext";
+import type { MovementType } from "@/types/movement";
+import Link from "next/link";
 
-interface Props {
-  initialEquipment: Equipment[];
-  initialMovements: Movement[];
-}
-
-export default function MovementsView({
-  initialEquipment,
-  initialMovements,
-}: Props) {
-  const [equipment, setEquipment] = useState(initialEquipment);
-  const [movements, setMovements] = useState(initialMovements);
+export default function MovementsView() {
+  const {
+    equipment,
+    movements,
+    registerMovement,
+  } = useInventory();
 
   const [equipmentId, setEquipmentId] = useState("");
   const [type, setType] = useState<MovementType>("EXIT");
   const [quantity, setQuantity] = useState(1);
   const [destination, setDestination] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const selectedEquipment = equipment.find(
     (item) => item.id === equipmentId
@@ -29,68 +26,35 @@ export default function MovementsView({
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     setError("");
+    setSuccess("");
 
-    if (!selectedEquipment) {
-      setError("Selecciona un equipo.");
-      return;
-    }
-
-    if (quantity <= 0) {
-      setError("La cantidad debe ser mayor que cero.");
-      return;
-    }
-
-    if (
-      (type === "EXIT" || type === "TRANSFER") &&
-      quantity > selectedEquipment.stock
-    ) {
-      setError(
-        `Stock insuficiente. Disponible: ${selectedEquipment.stock}.`
-      );
-      return;
-    }
-
-    const stockChange =
-      type === "ENTRY" || type === "RETURN"
-        ? quantity
-        : -quantity;
-
-    setEquipment((current) =>
-      current.map((item) =>
-        item.id === equipmentId
-          ? { ...item, stock: item.stock + stockChange }
-          : item
-      )
-    );
-
-    const movement: Movement = {
-      id: `MOV-${String(movements.length + 1).padStart(3, "0")}`,
+    const result = registerMovement({
       type,
       equipmentId,
       quantity,
-      origin:
-        type === "ENTRY"
-          ? "Proveedor"
-          : selectedEquipment.location,
-      destination:
-        destination ||
-        (type === "RETURN"
-          ? "Bodega principal"
-          : selectedEquipment.location),
-      responsibleUserId: "USR-001",
-      responsibleName: "Encargado de bodega",
-      date: new Date().toISOString(),
-    };
+      destination,
+    });
 
-    setMovements((current) => [movement, ...current]);
+    if (!result.success) {
+      setError(result.message);
+      return;
+    }
 
+    setSuccess(result.message);
     setQuantity(1);
     setDestination("");
   }
 
   return (
     <>
+      <Link
+        href="/inventario"
+        className="mb-4 inline-block text-sm font-medium text-blue-600 hover:underline"
+      >
+        ← Ir a inventario
+      </Link>
       <form
         onSubmit={handleSubmit}
         className="mb-8 grid gap-4 rounded-xl border border-gray-200 bg-white p-6 md:grid-cols-2 lg:grid-cols-4"
@@ -171,6 +135,12 @@ export default function MovementsView({
           {error && (
             <p className="mb-3 text-sm font-medium text-red-600">
               {error}
+            </p>
+          )}
+
+          {success && (
+            <p className="mb-3 text-sm font-medium text-green-700">
+              {success}
             </p>
           )}
 

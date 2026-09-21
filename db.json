@@ -14,7 +14,7 @@
       "supplier": "Proveedor Dtech",
       "warranty": "12 meses",
       "purchaseDate": "2026-06-15",
-      "stock": 22,
+      "stock": 21,
       "minimumStock": 10,
       "unitValue": 249.99,
       "status": "IN_STOCK"
@@ -81,6 +81,17 @@
       "responsibleUserId": "USR-001",
       "responsibleName": "Encargado de bodega",
       "date": "2026-09-21T07:35:54.463Z"
+    },
+    {
+      "id": "MOV-1789978869236",
+      "type": "EXIT",
+      "equipmentId": "1",
+      "quantity": 1,
+      "origin": "Bodega principal",
+      "destination": "Prueba integracion",
+      "responsibleUserId": "USR-001",
+      "responsibleName": "Encargado de bodega",
+      "date": "2026-09-21T08:21:09.236Z"
     }
   ]
 }

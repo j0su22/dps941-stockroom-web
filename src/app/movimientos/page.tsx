@@ -1,11 +1,12 @@
 import MovementsView from "@/components/movements/MovementsView";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 
 export default function MovementsPage() {
   return (
-    <main className="min-h-screen bg-gray-50 p-6 text-gray-900 md:p-8">
+    <DashboardLayout>
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-3xl font-bold text-gray-900">
             Movimientos
           </h1>
 
@@ -16,6 +17,6 @@ export default function MovementsPage() {
 
         <MovementsView />
       </div>
-    </main>
+    </DashboardLayout>
   );
 }

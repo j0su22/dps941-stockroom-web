@@ -60,14 +60,14 @@ export default function MovementsView() {
         className="mb-8 grid gap-4 rounded-xl border border-gray-200 bg-white p-6 md:grid-cols-2 lg:grid-cols-4"
       >
         <div>
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             Equipo
           </label>
 
           <select
             value={equipmentId}
             onChange={(e) => setEquipmentId(e.target.value)}
-            className="w-full rounded-lg border p-2.5"
+            className="w-full rounded-lg border border-gray-300 bg-white p-2.5 text-gray-900"
           >
             <option value="">Seleccionar...</option>
 
@@ -86,7 +86,7 @@ export default function MovementsView() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             Tipo
           </label>
 
@@ -95,7 +95,7 @@ export default function MovementsView() {
             onChange={(e) =>
               setType(e.target.value as MovementType)
             }
-            className="w-full rounded-lg border p-2.5"
+            className="w-full rounded-lg border border-gray-300 bg-white p-2.5 text-gray-900"
           >
             <option value="ENTRY">Entrada</option>
             <option value="EXIT">Salida</option>
@@ -105,7 +105,7 @@ export default function MovementsView() {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             Cantidad
           </label>
 
@@ -114,12 +114,12 @@ export default function MovementsView() {
             min="1"
             value={quantity}
             onChange={(e) => setQuantity(Number(e.target.value))}
-            className="w-full rounded-lg border p-2.5"
+            className="w-full rounded-lg border border-gray-300 bg-white p-2.5 text-gray-900 placeholder:text-gray-400"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium">
+          <label className="mb-1 block text-sm font-medium text-gray-700">
             Destino
           </label>
 
@@ -127,7 +127,7 @@ export default function MovementsView() {
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             placeholder="Proyecto o ubicación"
-            className="w-full rounded-lg border p-2.5"
+            className="w-full rounded-lg border border-gray-300 bg-white p-2.5 text-gray-900 placeholder:text-gray-400"
           />
         </div>
 

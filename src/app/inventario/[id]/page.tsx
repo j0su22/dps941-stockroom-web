@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useInventory } from "@/context/InventoryContext";
 import TraceabilityTimeline from "@/components/inventory/TraceabilityTimeline";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 
 export default function EquipmentDetailPage() {
   const params = useParams<{ id: string }>();
@@ -15,16 +16,18 @@ export default function EquipmentDetailPage() {
 
   if (!equipment) {
     return (
-      <main className="min-h-screen bg-gray-50 p-8">
-        <p>Equipo no encontrado.</p>
+      <DashboardLayout>
+        <div className="mx-auto max-w-6xl">
+          <p>Equipo no encontrado.</p>
 
-        <Link
-          href="/inventario"
-          className="mt-4 inline-block text-blue-600 hover:underline"
-        >
-          ← Volver al inventario
-        </Link>
-      </main>
+          <Link
+            href="/inventario"
+            className="mt-4 inline-block text-blue-600 hover:underline"
+          >
+            ← Volver al inventario
+          </Link>
+        </div>
+      </DashboardLayout>
     );
   }
 
@@ -39,8 +42,8 @@ export default function EquipmentDetailPage() {
     equipment.stock <= equipment.minimumStock;
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 text-gray-900 md:p-8">
-      <div className="mx-auto max-w-6xl">
+    <DashboardLayout>
+      <div className="mx-auto max-w-6xl text-gray-900">
         <Link
           href="/inventario"
           className="mb-6 inline-block text-sm text-gray-600 hover:text-gray-900"
@@ -74,27 +77,16 @@ export default function EquipmentDetailPage() {
           <Info label="Modelo" value={equipment.model} />
           <Info label="Serial" value={equipment.serialNumber} />
           <Info label="MAC" value={equipment.macAddress} />
-
           <Info label="Ubicación" value={equipment.location} />
           <Info label="Responsable" value={equipment.responsible} />
           <Info label="Proveedor" value={equipment.supplier} />
-
           <Info label="Garantía" value={equipment.warranty} />
-          <Info
-            label="Fecha de compra"
-            value={equipment.purchaseDate}
-          />
-
-          <Info
-            label="Existencia"
-            value={String(equipment.stock)}
-          />
-
+          <Info label="Fecha de compra" value={equipment.purchaseDate} />
+          <Info label="Existencia" value={String(equipment.stock)} />
           <Info
             label="Stock mínimo"
             value={String(equipment.minimumStock)}
           />
-
           <Info
             label="Valor unitario"
             value={
@@ -116,12 +108,10 @@ export default function EquipmentDetailPage() {
             </p>
           </div>
 
-          <TraceabilityTimeline
-            events={equipmentTraceability}
-          />
+          <TraceabilityTimeline events={equipmentTraceability} />
         </section>
       </div>
-    </main>
+    </DashboardLayout>
   );
 }
 

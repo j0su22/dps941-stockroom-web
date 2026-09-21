@@ -1,13 +1,14 @@
 "use client";
 
 import InventoryView from "@/components/inventory/InventoryView";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useInventory } from "@/context/InventoryContext";
 
 export default function InventoryPage() {
   const { equipment } = useInventory();
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6 md:p-8">
+    <DashboardLayout>
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row">
           <div>
@@ -33,6 +34,6 @@ export default function InventoryPage() {
 
         <InventoryView />
       </div>
-    </main>
+    </DashboardLayout>
   );
 }

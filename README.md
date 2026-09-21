@@ -285,7 +285,7 @@ Entre las tareas pendientes se encuentran la integración completa de los módul
 
 El despliegue web se realizaró mediante **Vercel**.
 
-Enlace: [Stockroom Vercel WEB]()
+Enlace: [Stockroom Vercel WEB](https://dps941-stockroom-mjgtbl1ic-j0su22s-projects.vercel.app/dashboard)
 
 ## Proyecto académico
 

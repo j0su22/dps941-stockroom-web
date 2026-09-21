@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   type ReactNode,
 } from "react";
@@ -10,6 +11,9 @@ import {
 import type { Equipment } from "@/types/equipment";
 import type { Movement, MovementType } from "@/types/movement";
 import type { TraceabilityEvent } from "@/types/traceability";
+
+import { inventoryService } from "@/services/inventoryService";
+import { movementService } from "@/services/movementService";
 
 import { mockEquipment } from "@/data/mockData";
 import { mockMovements } from "@/data/mockMovements";
@@ -31,10 +35,12 @@ interface InventoryContextType {
   equipment: Equipment[];
   movements: Movement[];
   traceability: TraceabilityEvent[];
+  loading: boolean;
+  error: string | null;
 
   registerMovement: (
     data: RegisterMovementData
-  ) => RegisterMovementResult;
+  ) => Promise<RegisterMovementResult>;
 }
 
 const InventoryContext = createContext<
@@ -49,15 +55,68 @@ export function InventoryProvider({
   const [equipment, setEquipment] =
     useState<Equipment[]>(mockEquipment);
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [movements, setMovements] =
     useState<Movement[]>(mockMovements);
 
   const [traceability, setTraceability] =
     useState<TraceabilityEvent[]>(mockTraceability);
 
-  function registerMovement(
+  useEffect(() => {
+    async function loadEquipment() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const [equipmentData, movementsData] = await Promise.all([
+          inventoryService.getAll(),
+          movementService.getAll(),
+        ]);
+
+        setEquipment(equipmentData);
+        setMovements(movementsData);
+
+        const traceabilityData: TraceabilityEvent[] = movementsData.map(
+          (movement) => {
+            const data = getTraceabilityData(
+              movement.type,
+              movement.origin,
+              movement.destination,
+              movement.quantity
+            );
+
+            return {
+              id: `TR-${movement.id}`,
+              equipmentId: movement.equipmentId,
+              type: movement.type,
+              title: data.title,
+              description: data.description,
+              date: movement.date,
+              responsible: movement.responsibleName ?? "Sin responsable",
+            };
+          }
+        );
+
+        setTraceability(traceabilityData);
+      } catch (err) {
+        console.error("Error al cargar inventario:", err);
+
+        setError(
+          "No se pudo cargar el inventario desde la API."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadEquipment();
+  }, []);
+
+  async function registerMovement(
     data: RegisterMovementData
-  ): RegisterMovementResult {
+  ): Promise<RegisterMovementResult> {
     const { type, equipmentId, quantity, destination } = data;
 
     const selectedEquipment = equipment.find(
@@ -125,36 +184,27 @@ export function InventoryProvider({
         ? "Bodega principal"
         : destination.trim();
 
+    let updatedEquipment: Equipment;
+
+    if (type === "ENTRY" || type === "RETURN") {
+      updatedEquipment = await inventoryService.update(equipmentId, {
+        stock: selectedEquipment.stock + quantity,
+      });
+    } else if (type === "EXIT") {
+      updatedEquipment = await inventoryService.update(equipmentId, {
+        stock: selectedEquipment.stock - quantity,
+      });
+    } else {
+      updatedEquipment = await inventoryService.update(equipmentId, {
+        location: finalDestination,
+      });
+    }
+
     // Actualizar inventario
     setEquipment((current) =>
-      current.map((item) => {
-        if (item.id !== equipmentId) {
-          return item;
-        }
-
-        if (type === "ENTRY" || type === "RETURN") {
-          return {
-            ...item,
-            stock: item.stock + quantity,
-          };
-        }
-
-        if (type === "EXIT") {
-          return {
-            ...item,
-            stock: item.stock - quantity,
-          };
-        }
-
-        if (type === "TRANSFER") {
-          return {
-            ...item,
-            location: finalDestination,
-          };
-        }
-
-        return item;
-      })
+      current.map((item) =>
+        item.id === equipmentId ? updatedEquipment : item
+      )
     );
 
     const movementId = `MOV-${Date.now()}`;
@@ -173,8 +223,11 @@ export function InventoryProvider({
       date,
     };
 
+    const savedMovement =
+      await movementService.create(newMovement);
+
     setMovements((current) => [
-      newMovement,
+      savedMovement,
       ...current,
     ]);
 
@@ -213,6 +266,8 @@ export function InventoryProvider({
         equipment,
         movements,
         traceability,
+        loading,
+        error,
         registerMovement,
       }}
     >

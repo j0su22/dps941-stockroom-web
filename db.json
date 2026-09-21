@@ -1,0 +1,86 @@
+{
+  "equipment": [
+    {
+      "id": "1",
+      "code": "EQ-001",
+      "name": "Ubiquiti U7 Pro XG",
+      "brand": "Ubiquiti",
+      "category": "Redes",
+      "model": "U7 Pro XG",
+      "serialNumber": "U7P-0001A2B3",
+      "macAddress": "A1:B2:C3:D4:E5:F6",
+      "location": "Bodega principal",
+      "responsible": "Bodega principal",
+      "supplier": "Proveedor Dtech",
+      "warranty": "12 meses",
+      "purchaseDate": "2026-06-15",
+      "stock": 22,
+      "minimumStock": 10,
+      "unitValue": 249.99,
+      "status": "IN_STOCK"
+    },
+    {
+      "id": "2",
+      "code": "MAT-002",
+      "name": "Conector RJ45 Cat6",
+      "brand": "Genérico",
+      "category": "Cableado",
+      "model": "RJ45 Cat6",
+      "location": "Bodega principal",
+      "responsible": "Bodega principal",
+      "supplier": "Proveedor Dtech",
+      "stock": 7,
+      "minimumStock": 10,
+      "unitValue": 0.5,
+      "status": "IN_STOCK"
+    },
+    {
+      "id": "3",
+      "code": "EQ-003",
+      "name": "Switch 24 puertos",
+      "brand": "Ubiquiti",
+      "category": "Redes",
+      "model": "Switch 24 puertos",
+      "location": "Proyecto Torre 1",
+      "responsible": "Proyecto Torre 1",
+      "supplier": "Proveedor Dtech",
+      "stock": 1,
+      "minimumStock": 5,
+      "unitValue": 399.99,
+      "status": "ASSIGNED"
+    }
+  ],
+  "movements": [
+    {
+      "id": "MOV-001",
+      "type": "ENTRY",
+      "equipmentId": "1",
+      "quantity": 24,
+      "origin": "Proveedor",
+      "destination": "Bodega principal",
+      "responsible": "Encargado de bodega",
+      "date": "2026-06-15"
+    },
+    {
+      "id": "MOV-002",
+      "type": "EXIT",
+      "equipmentId": "1",
+      "quantity": 2,
+      "origin": "Bodega principal",
+      "destination": "Proyecto Torre 1",
+      "responsible": "Encargado de bodega",
+      "date": "2026-07-02"
+    },
+    {
+      "id": "MOV-1789976154463",
+      "type": "EXIT",
+      "equipmentId": "1",
+      "quantity": 2,
+      "origin": "Bodega principal",
+      "destination": "Prueba persistencia",
+      "responsibleUserId": "USR-001",
+      "responsibleName": "Encargado de bodega",
+      "date": "2026-09-21T07:35:54.463Z"
+    }
+  ]
+}

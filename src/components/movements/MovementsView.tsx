@@ -24,13 +24,13 @@ export default function MovementsView() {
     (item) => item.id === equipmentId
   );
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
     setSuccess("");
 
-    const result = registerMovement({
+    const result = await registerMovement({
       type,
       equipmentId,
       quantity,

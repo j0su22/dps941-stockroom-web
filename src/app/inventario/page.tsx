@@ -31,7 +31,7 @@ export default function InventoryPage() {
           </div>
         </div>
 
-        <InventoryView equipment={equipment} />
+        <InventoryView />
       </div>
     </main>
   );

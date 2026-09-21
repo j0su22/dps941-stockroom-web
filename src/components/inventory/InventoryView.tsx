@@ -1,14 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Equipment, EquipmentStatus } from "@/types/equipment";
+import type { EquipmentStatus } from "@/types/equipment";
 import EquipmentTable from "./EquipmentTable";
 import { useInventory } from "@/context/InventoryContext";
 import Link from "next/link";
-
-interface InventoryViewProps {
-  equipment: Equipment[];
-}
 
 type FilterStatus = "ALL" | "LOW_STOCK" | EquipmentStatus;
 
